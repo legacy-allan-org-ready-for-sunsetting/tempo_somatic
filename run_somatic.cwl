@@ -74,10 +74,20 @@ steps:
     out: [ directory ]
     run: utils/put_files_in_dir.cwl
 
+  put_in_dir_placeholder:
+    in:
+      files:
+        source: [ run_facets/facets_out_files, run_facets/facets_png, run_facets/facets_rdata, run_facets/facets_seg, run_facets/facets_txt_hisens, run_facets/facets_txt_purity ] 
+        linkMerge: merge_flattened 
+      output_directory_name:
+        valueFrom: ${ return "placeholder"; }
+    out: [ directory ]
+    run: utils/put_files_in_dir.cwl
+
   put_in_dir_somatic:
     in:
       files:
-        source: [ put_in_dir_facets/directory ]
+        source: [ put_in_dir_facets/directory, put_in_dir_placeholder/directory ]
       output_directory_name: 
         valueFrom: ${ return "somatic"; }
     out: [ directory ]
