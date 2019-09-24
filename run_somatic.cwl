@@ -46,30 +46,10 @@ inputs:
         seed: int
 
 outputs:
-  facets_png:
-    type: File[]?
-    outputSource: run_facets/facets_png
+  dir_somatic:
+    type: Directory
+    outputSource: put_in_dir_somatic/directory
 
-  facets_txt_purity:
-    type: File?
-    outputSource: run_facets/facets_txt_purity
-
-  facets_txt_hisens:
-    type: File?
-    outputSource: run_facets/facets_txt_hisens
-
-  facets_out_files:
-    type: File[]?
-    outputSource: run_facets/facets_out_files
-
-  facets_rdata:
-    type: File[]?
-    outputSource: run_facets/facets_rdata
-
-  facets_seg:
-    type: File[]?
-    outputSource: run_facets/facets_seg
-  
 steps:
   run_facets:
     in:
@@ -83,6 +63,25 @@ steps:
         valueFrom: ${ return inputs.tumor_id + ".dat.gz" }
     out: [ facets_out_files, facets_png, facets_rdata, facets_seg, facets_txt_hisens, facets_txt_purity ] 
     run: cnv_facets/cnv_facets.cwl
+
+  put_in_dir_facets:
+    in:
+      files:
+        source: [ run_facets/facets_out_files, run_facets/facets_png, run_facets/facets_rdata, run_facets/facets_seg, run_facets/facets_txt_hisens, run_facets/facets_txt_purity ] 
+        linkMerge: merge_flattened 
+      output_directory_name:
+        valueFrom: ${ return "facets"; }
+    out: [ directory ]
+    run: utils/put_files_in_dir.cwl
+
+  put_in_dir_somatic:
+    in:
+      files:
+        source: [ put_in_dir_facets/directory ]
+      output_directory_name: 
+        valueFrom: ${ return "somatic"; }
+    out: [ directory ]
+    run: utils/put_files_in_dir.cwl
 
 requirements:
   - class: SubworkflowFeatureRequirement
