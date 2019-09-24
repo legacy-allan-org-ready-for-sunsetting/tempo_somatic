@@ -46,9 +46,9 @@ inputs:
         seed: int
 
 outputs:
-  dir_facets:
+  dir_somatic:
     type: Directory
-    outputSource: put_in_dir_facets/directory
+    outputSource: put_in_dir_somatic/directory
 
 steps:
   run_facets:
@@ -71,6 +71,15 @@ steps:
         linkMerge: merge_flattened 
       output_directory_name:
         valueFrom: ${ return "facets"; }
+    out: [ directory ]
+    run: utils/put_files_in_dir.cwl
+
+  put_in_dir_somatic:
+    in:
+      files:
+        source: [ put_in_dir_facets/directory ]
+      output_directory_name: 
+        valueFrom: ${ return "somatic"; }
     out: [ directory ]
     run: utils/put_files_in_dir.cwl
 
