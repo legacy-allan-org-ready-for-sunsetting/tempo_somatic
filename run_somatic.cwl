@@ -77,7 +77,7 @@ steps:
       t: tumor_bam
       n: normal_bam
       o:
-        valueFrom: ${ return inputs.t.basename.replace(".bam","") + "_" + inputs.t.basename.replace(".bam","") + "msisensor.tsv"; }
+        valueFrom: ${ return inputs.t.basename.replace(".bam","") + "_" + inputs.t.basename.replace(".bam","") + ".msisensor.tsv"; }
     out: [ output ]
     run: msisensor_0.5/msisensor.cwl
 
