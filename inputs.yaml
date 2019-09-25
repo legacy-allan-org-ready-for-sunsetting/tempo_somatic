@@ -39,3 +39,8 @@ facets_params:
   single_chrom: "F"
   ggplot2: "T"
   seed: 100
+
+msisensor_list: { 
+    class: File,
+    path: /path/to/microsatellites.list 
+    }
