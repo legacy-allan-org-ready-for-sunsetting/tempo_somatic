@@ -45,6 +45,9 @@ inputs:
         ggplot2: string
         seed: int
 
+  msisensor_list:
+    type: File
+
 outputs:
   dir_somatic:
     type: Directory
@@ -64,6 +67,16 @@ steps:
     out: [ facets_out_files, facets_png, facets_rdata, facets_seg, facets_txt_hisens, facets_txt_purity ] 
     run: cnv_facets/cnv_facets.cwl
 
+  run_msisensor:
+    in:
+      d: msisensor_list
+      t: tumor_bam
+      n: normal_bam
+      o:
+        valueFrom: ${ return inputs.t.basename.replace(".bam","") + "_" + inputs.t.basename.replace(".bam","") + "msisensor.tsv"; }
+    out: [ output ]
+    run: msisensor_0.5/msisensor.cwl
+
   put_in_dir_facets:
     in:
       files:
@@ -74,20 +87,20 @@ steps:
     out: [ directory ]
     run: utils/put_files_in_dir.cwl
 
-  put_in_dir_placeholder:
+  put_in_dir_msisensor:
     in:
       files:
-        source: [ run_facets/facets_out_files, run_facets/facets_png, run_facets/facets_rdata, run_facets/facets_seg, run_facets/facets_txt_hisens, run_facets/facets_txt_purity ] 
+        source: [ run_msisensor/output ] 
         linkMerge: merge_flattened 
       output_directory_name:
-        valueFrom: ${ return "placeholder"; }
+        valueFrom: ${ return "msisensor"; }
     out: [ directory ]
     run: utils/put_files_in_dir.cwl
 
   put_in_dir_somatic:
     in:
       files:
-        source: [ put_in_dir_facets/directory, put_in_dir_placeholder/directory ]
+        source: [ put_in_dir_facets/directory, put_in_dir_msisensor/directory ]
       output_directory_name: 
         valueFrom: ${ return "somatic"; }
     out: [ directory ]
