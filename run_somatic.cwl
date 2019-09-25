@@ -6,9 +6,13 @@ label: run_somatic
 inputs:
   tumor_bam:
     type: File
+    secondaryFiles:
+      - ^.bai
 
   normal_bam:
     type: File
+    secondaryFiles:
+      - ^.bai
 
   facets_vcf:
     type: File
