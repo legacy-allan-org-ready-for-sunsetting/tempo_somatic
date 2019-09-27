@@ -4,6 +4,17 @@ id: run_somatic
 label: run_somatic
 
 inputs:
+  reference_sequence:
+    type: File
+    secondaryFiles:
+      - .amb
+      - .ann
+      - .bwt
+      - .pac
+      - .sa
+      - .fai
+      - ^.dict
+
   tumor_bam:
     type: File
     secondaryFiles:
@@ -18,6 +29,9 @@ inputs:
     type: File
     secondaryFiles:
       - .gz
+
+  normal_id:
+    type: string
 
   tumor_id:
     type: string
@@ -48,6 +62,13 @@ inputs:
         single_chrom: string
         ggplot2: string
         seed: int
+
+  delly_params:
+    type:
+      type: record
+      fields:
+        svtype: string[]
+        delly_exclude: File
 
   msisensor_list:
     type: File
@@ -81,6 +102,21 @@ steps:
     out: [ output ]
     run: msisensor_0.5/msisensor.cwl
 
+  run_delly:
+    in:
+      params: delly_params
+      svtype:
+        valueFrom: $(inputs.params.svtype)
+      exclude: 
+        valueFrom: $(inputs.params.exclude)
+      id_tumor: tumor_id 
+      id_normal: normal_id
+      bam_tumor: tumor_bam
+      bam_normal: normal_bam
+      genome: reference_sequence
+    out: [ delly_filtered_output ]
+    run: delly_workflow/run_delly.cwl
+      
   put_in_dir_facets:
     in:
       files:
@@ -101,10 +137,20 @@ steps:
     out: [ directory ]
     run: utils/put_files_in_dir.cwl
 
+  put_in_dir_delly:
+    in:
+      files:
+        source: [ run_delly/delly_filtered_output ] 
+        linkMerge: merge_flattened 
+      output_directory_name:
+        valueFrom: ${ return "delly"; }
+    out: [ directory ]
+    run: utils/put_files_in_dir.cwl
+
   put_in_dir_somatic:
     in:
       files:
-        source: [ put_in_dir_facets/directory, put_in_dir_msisensor/directory ]
+        source: [ put_in_dir_facets/directory, put_in_dir_msisensor/directory, put_in_dir_delly/directory ]
       output_directory_name: 
         valueFrom: ${ return "somatic"; }
     out: [ directory ]

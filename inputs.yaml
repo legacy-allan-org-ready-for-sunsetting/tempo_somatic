@@ -2,7 +2,12 @@ bam_normal: { class: File, path: /bam/here, secondaryFiles: [ { class: File, pat
 bam_tumor: { class: File, path: /bam/here, secondaryFiles: [ { class: File, path: /bai/here} ]  } }
 facets_output_prefix: "my_tumor_id"
 tumor_id: "my_tumor_id"
+normal_id: "my_normal_id"
 snp_pileup_output_file_name: "my_snp_pileup_output_file_name.dat.gz"
+
+reference_sequence:
+  class: File
+  path: /default/path
 
 # default vcf file used by facets
 facets_vcf: {
@@ -44,3 +49,9 @@ msisensor_list: {
     class: File,
     path: /path/to/microsatellites.list 
     }
+
+delly_params:
+  svtype: [ "INS", "DUP", "DEL", "BND", "INV" ]
+  exclude:
+    class: File
+    path: /juno/work/taylorlab/cmopipeline/mskcc-igenomes/grch37/sv_calling/human.hg19.excl.tsv
