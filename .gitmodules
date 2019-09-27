@@ -7,3 +7,6 @@
 [submodule "msisensor_0.5"]
 	path = msisensor_0.5
 	url = https://github.com/mskcc-cwl/msisensor_0.5
+[submodule "delly_workflow"]
+	path = delly_workflow
+	url = https://github.com/mskcc-cwl/delly_workflow
