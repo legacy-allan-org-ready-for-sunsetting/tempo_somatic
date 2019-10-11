@@ -44,6 +44,7 @@ facets_params:
   single_chrom: "F"
   ggplot2: "T"
   seed: 100
+  dipLogR: null
 
 msisensor_list: { 
     class: File,
