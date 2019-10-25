@@ -62,6 +62,7 @@ inputs:
         single_chrom: string
         ggplot2: string
         seed: int
+        dipLogR: float?
 
   delly_params:
     type:
