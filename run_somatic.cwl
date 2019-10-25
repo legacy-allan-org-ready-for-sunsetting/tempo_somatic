@@ -95,13 +95,11 @@ steps:
 
   run_msisensor:
     in:
-      d: msisensor_list
-      t: tumor_bam
-      n: normal_bam
-      o:
-        valueFrom: ${ return inputs.t.basename.replace(".bam","") + "_" + inputs.t.basename.replace(".bam","") + ".msisensor.tsv"; }
+      bam_normal: normal_bam
+      bam_tumor: tumor_bam
+      msisensor_list: msisensor_list
     out: [ output ]
-    run: msisensor_0.5/msisensor.cwl
+    run: msisensor_workflow/run_msisensor.cwl
 
   run_delly:
     in:
