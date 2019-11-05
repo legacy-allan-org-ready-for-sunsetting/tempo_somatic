@@ -4,9 +4,6 @@
 [submodule "utils"]
 	path = utils
 	url = https://github.com/mskcc-cwl/utils
-[submodule "delly_workflow"]
-	path = delly_workflow
-	url = https://github.com/mskcc-cwl/delly_workflow
 [submodule "msisensor_workflow"]
 	path = msisensor_workflow
 	url = https://github.com/mskcc-cwl/msisensor_workflow
